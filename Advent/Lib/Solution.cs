@@ -4,8 +4,8 @@ namespace Advent.Lib;
 
 public interface Solution
 {
-    void PartOne(string input);
-    void PartTwo(string input);
+    void PartOne(string[] input);
+    void PartTwo(string[] input);
 }
 
 public static class SolutionExtensions
@@ -16,7 +16,7 @@ public static class SolutionExtensions
         return $"{diff:F3} ms";
     }
     
-    public static void Solve(this Solution solution, string input)
+    public static void Solve(this Solution solution, string[] input)
     {
         var watch = Stopwatch.StartNew();
         solution.PartOne(input);
