@@ -11,4 +11,8 @@
       <Folder Include="Solutions\" />
     </ItemGroup>
 
+    <ItemGroup>
+      <PackageReference Include="System.CommandLine" Version="2.0.0" />
+    </ItemGroup>
+
 </Project>
