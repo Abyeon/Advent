@@ -28,16 +28,24 @@ public class GiftShop : Solution
         
         Console.WriteLine($"Total is: {total}");
     }
+
+    private static List<string> SplitInParts(string s, int partLength)
+    {
+        var list = new List<string>(s.Length / partLength);
+        for (var i = 0; i < s.Length; i += partLength)
+            list.Add(s.Substring(i, Math.Min(partLength, s.Length - i)));
+        
+        return list;
+    }
     
     public void PartTwo(string[] input)
     {
-        var lines = input[0].Split(',');
-        
         long total = 0;
-        foreach (var line in lines)
+        foreach (var line in input[0].Split(','))
         {
-            var min = long.Parse(line.Split('-')[0]);
-            var max = long.Parse(line.Split('-')[1]);
+            var pieces = line.Split('-');
+            var min = long.Parse(pieces[0]);
+            var max = long.Parse(pieces[1]);
 
             for (var i = min; i <= max; i++)
             {
@@ -47,7 +55,7 @@ public class GiftShop : Solution
                 {
                     if (current.Length % j != 0) continue;
                     
-                    var split = current.SplitInParts(j).ToList();
+                    var split = SplitInParts(current, j);
                     if (split.Any(x => !x.Equals(split.First()))) continue;
                     
                     total += long.Parse(current);
