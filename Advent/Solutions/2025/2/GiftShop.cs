@@ -28,17 +28,6 @@ public class GiftShop : Solution
         
         Console.WriteLine($"Total is: {total}");
     }
-
-    private static bool AllEqual<T>(T[] array)
-    {
-        if (array is not { Length: > 1 })
-        {
-            return true;
-        }
-
-        var firstElement = array[0];
-        return array.All(element => EqualityComparer<T>.Default.Equals(element, firstElement));
-    }
     
     public void PartTwo(string[] input)
     {
@@ -56,8 +45,10 @@ public class GiftShop : Solution
 
                 for (var j = 1; j < current.Length; j++)
                 {
-                    var split = current.SplitInParts(j);
-                    if (!AllEqual(split.ToArray())) continue;
+                    if (current.Length % j != 0) continue;
+                    
+                    var split = current.SplitInParts(j).ToList();
+                    if (split.Any(x => !x.Equals(split.First()))) continue;
                     
                     total += long.Parse(current);
                     break;
