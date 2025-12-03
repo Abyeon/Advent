@@ -4,35 +4,35 @@ namespace Advent.Solutions._2025._1;
 
 public class SecretEntrance : Solution
 {
-    public void PartOne(string[] input)
+    public string PartOne(string[] input)
     {
         var totalZero = 0;
         var pos = 50;
-        foreach (var line in input)
+        foreach (string line in input)
         {
             var sign = 1;
             if (line[..1].Equals("L")) sign = -1;
         
-            var amount = int.Parse(line[1..]);
+            int amount = int.Parse(line[1..]);
             pos = (pos + (sign * amount)) % 100;
             if (pos < 0) pos += 100;
         
             if (pos == 0) totalZero++;
         }
     
-        Console.WriteLine($"Total Zeroes: {totalZero}");
+        return totalZero.ToString();
     }
 
-    public void PartTwo(string[] input)
+    public string PartTwo(string[] input)
     {
         var totalZero = 0;
         var pos = 50;
-        foreach (var line in input)
+        foreach (string line in input)
         {
             var sign = 1;
             if (line[..1].Equals("L")) sign = -1;
             
-            var amount = int.Parse(line[1..]);
+            int amount = int.Parse(line[1..]);
             for (var i = 0; i < amount; i++)
             {
                 pos = (pos + sign) % 100;
@@ -41,6 +41,6 @@ public class SecretEntrance : Solution
             }
         }
     
-        Console.WriteLine($"Total Zeroes: {totalZero}");
+        return totalZero.ToString();
     }
 }

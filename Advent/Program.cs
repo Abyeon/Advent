@@ -86,5 +86,5 @@ root.SetAction(async (result) =>
 
 root.Parse(args).Invoke();
 
-Console.WriteLine("\nFinished processing puzzles!");
+Console.WriteLine("\nFinished processing puzzles!\n");
 // Console.ReadKey();

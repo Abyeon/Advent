@@ -1,20 +1,17 @@
-﻿using System.Collections.Immutable;
-using System.Text;
-using Advent.Lib;
-using ZLinq;
+﻿using Advent.Lib;
 
 namespace Advent.Solutions._2025._3;
 
 public class Lobby : Solution
 {
-    public void PartOne(string[] input)
+    public string PartOne(string[] input)
     {
         var total = 0;
-        foreach (var line in input)
+        foreach (string line in input)
         {
-            var bank = line.ToArray();
-            var max = bank.Max();
-            var index = bank.IndexOf(max);
+            char[] bank = line.ToArray();
+            char max = bank.Max();
+            int index = bank.IndexOf(max);
 
             char secondMax;
             if (index == bank.Length - 1)
@@ -28,10 +25,10 @@ public class Lobby : Solution
             total += int.Parse([max, secondMax]);
         }
         
-        Console.WriteLine(total);
+        return total.ToString();
     }
 
-    public void PartTwo(string[] input)
+    public string PartTwo(string[] input)
     {
         ulong total = 0;
         foreach (string line in input)
@@ -51,6 +48,6 @@ public class Lobby : Solution
             total += ulong.Parse(output);
         }
         
-        Console.WriteLine($"Total: {total}");
+        return total.ToString();
     }
 }

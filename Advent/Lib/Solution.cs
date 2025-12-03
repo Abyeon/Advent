@@ -4,8 +4,8 @@ namespace Advent.Lib;
 
 public interface Solution
 {
-    void PartOne(string[] input);
-    void PartTwo(string[] input);
+    string PartOne(string[] input);
+    string PartTwo(string[] input);
 }
 
 public static class SolutionExtensions
@@ -18,15 +18,20 @@ public static class SolutionExtensions
     
     public static void Solve(this Solution solution, string[] input)
     {
+        var partOne = "";
+        var partTwo = "";
+        
         var watch = Stopwatch.StartNew();
-        solution.PartOne(input);
+        partOne = solution.PartOne(input);
         watch.Stop();
-        Console.WriteLine("  Part One: " + PrettifyTicks(watch.ElapsedTicks));
+        Console.WriteLine("Part One: " + PrettifyTicks(watch.ElapsedTicks));
+        Console.WriteLine("  Output: " + partOne);
         
         watch.Restart();
-        solution.PartTwo(input);
+        partTwo = solution.PartTwo(input);
         watch.Stop();
-        Console.WriteLine("  Part Two: " + PrettifyTicks(watch.ElapsedTicks));
+        Console.WriteLine("Part Two: " + PrettifyTicks(watch.ElapsedTicks));
+        Console.WriteLine("  Output: " + partTwo);
     }
 
     public static int Year(this Solution solution)

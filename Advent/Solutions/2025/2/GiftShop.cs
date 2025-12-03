@@ -4,29 +4,29 @@ namespace Advent.Solutions._2025._2;
 
 public class GiftShop : Solution
 {
-    public void PartOne(string[] input)
+    public string PartOne(string[] input)
     {
-        var lines = input[0].Split(',');
+        string[] lines = input[0].Split(',');
         
         long total = 0;
-        foreach (var line in lines)
+        foreach (string line in lines)
         {
-            var min = long.Parse(line.Split('-')[0]);
-            var max = long.Parse(line.Split('-')[1]);
+            long min = long.Parse(line.Split('-')[0]);
+            long max = long.Parse(line.Split('-')[1]);
 
-            for (var i = min; i <= max; i++)
+            for (long i = min; i <= max; i++)
             {
                 var current = i.ToString();
 
-                var firstHalf = current[..(current.Length / 2)];
-                var secondHalf = current[(current.Length / 2)..];
+                string firstHalf = current[..(current.Length / 2)];
+                string secondHalf = current[(current.Length / 2)..];
                 if (firstHalf != secondHalf) continue;
                 
                 total += long.Parse(current);
             }
         }
         
-        Console.WriteLine($"Total is: {total}");
+        return total.ToString();
     }
 
     private static List<string> SplitInParts(string s, int partLength)
@@ -38,16 +38,16 @@ public class GiftShop : Solution
         return list;
     }
     
-    public void PartTwo(string[] input)
+    public string PartTwo(string[] input)
     {
         long total = 0;
-        foreach (var line in input[0].Split(','))
+        foreach (string line in input[0].Split(','))
         {
-            var pieces = line.Split('-');
-            var min = long.Parse(pieces[0]);
-            var max = long.Parse(pieces[1]);
+            string[] pieces = line.Split('-');
+            long min = long.Parse(pieces[0]);
+            long max = long.Parse(pieces[1]);
 
-            for (var i = min; i <= max; i++)
+            for (long i = min; i <= max; i++)
             {
                 var current = i.ToString();
 
@@ -64,6 +64,6 @@ public class GiftShop : Solution
             }
         }
         
-        Console.WriteLine($"Total is: {total}");
+        return total.ToString();
     }
 }
