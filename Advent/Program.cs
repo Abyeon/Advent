@@ -33,9 +33,9 @@ root.Add(allOpt);
 
 root.SetAction(async (result) =>
 {
-    var year = result.GetValue(yearOpt);
-    var day = result.GetValue(dayOpt);
-    var runAll = result.GetValue(allOpt);
+    int year = result.GetValue(yearOpt);
+    int day = result.GetValue(dayOpt);
+    bool runAll = result.GetValue(allOpt);
     
     List<Solution> toRun = [];
     foreach (var type in solutions)
@@ -60,8 +60,8 @@ root.SetAction(async (result) =>
         }
     }
     
-    var currentDir = Directory.GetCurrentDirectory();
-    var cookie = await AdventOfCode.GetCookie(Path.Combine(currentDir, "cookie.txt"));
+    string currentDir = Directory.GetCurrentDirectory();
+    string cookie = await AdventOfCode.GetCookie(Path.Combine(currentDir, "cookie.txt"));
 
     Console.WriteLine($"Running {toRun.Count} puzzle(s) for year: {year}, day: {(runAll ? "ALL" : day)}");
     
@@ -69,7 +69,7 @@ root.SetAction(async (result) =>
     {
         Console.WriteLine($"Day: {solution.Day()}");
         
-        var path = Path.Combine(currentDir, $"inputs/{solution.Year()}/");
+        string path = Path.Combine(currentDir, $@"inputs\{solution.Year()}\");
         if (!Directory.Exists(path))
         {
             Directory.CreateDirectory(path);
@@ -77,11 +77,14 @@ root.SetAction(async (result) =>
         }
     
         path = Path.Combine(path, $"{solution.Day()}.txt");
-        var input = await AdventOfCode.GetInput(solution.Year(), solution.Day(), cookie, path);
+        string input = await AdventOfCode.GetInput(solution.Year(), solution.Day(), cookie, path);
     
-        var lines = input.Split(['\r', '\n'], StringSplitOptions.None);
+        string[] lines = input.Split(['\r', '\n'], StringSplitOptions.RemoveEmptyEntries);
         solution.Solve(lines);
     }
 });
 
 root.Parse(args).Invoke();
+
+Console.WriteLine("\nFinished processing puzzles!");
+// Console.ReadKey();
