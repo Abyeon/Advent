@@ -37,6 +37,8 @@ public abstract class AdventOfCode
         using var client = new HttpClient(handler);
         client.BaseAddress = uri;
         
+        Console.WriteLine($"Fetching puzzle input from AdventOfCode...");
+        
         using var response = await client.GetAsync($"/{year}/day/{day}/input");
         response.EnsureSuccessStatusCode();
         
@@ -44,6 +46,8 @@ public abstract class AdventOfCode
         await using var file = new FileStream(filename, FileMode.Create, FileAccess.Write, FileShare.None);
         await using var stream = await response.Content.ReadAsStreamAsync();
         await stream.CopyToAsync(file);
+        
+        Console.WriteLine($"Puzzle input saved to {filename}");
             
         // Finally return the data
         return response.Content.ReadAsStringAsync().Result;

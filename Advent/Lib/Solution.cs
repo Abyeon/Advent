@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics;
+using System.Text.RegularExpressions;
 
 namespace Advent.Lib;
 
@@ -8,28 +9,8 @@ public interface Solution
     string PartTwo(string[] input);
 }
 
-public static class SolutionExtensions
+public static partial class SolutionExtensions
 {
-    // private static string PrettifyTicks(long ticks)
-    // {
-    //     double diff = ticks * 1000.0 / Stopwatch.Frequency;
-    //     return $"{diff:F3} ms";
-    // }
-
-    private static string GetReadableTimeSpan(TimeSpan ts)
-    {
-        if (ts.TotalSeconds >= 1)
-        {
-            return $"{ts.TotalSeconds} seconds";
-        }
-        
-        if (ts.TotalMilliseconds >= 1)
-        {
-            return $"{ts.TotalMilliseconds} ms";
-        }
-        
-        return ts.TotalMicroseconds + " µs";
-    }
     
     public static void Solve(this Solution solution, string[] input)
     {
@@ -37,13 +18,13 @@ public static class SolutionExtensions
         string partOne = solution.PartOne(input);
         var elapsed = Stopwatch.GetElapsedTime(start);
         
-        Console.WriteLine($"Part One: {partOne} in {GetReadableTimeSpan(elapsed)}");
+        Console.WriteLine($"Part One: {partOne} in {Utils.GetReadableTimeSpan(elapsed)}");
         
         start = Stopwatch.GetTimestamp();
         string partTwo = solution.PartTwo(input);
         elapsed = Stopwatch.GetElapsedTime(start);
         
-        Console.WriteLine($"Part Two: {partTwo} in {GetReadableTimeSpan(elapsed)}");
+        Console.WriteLine($"Part Two: {partTwo} in {Utils.GetReadableTimeSpan(elapsed)}");
         Console.WriteLine();
     }
 
@@ -61,5 +42,10 @@ public static class SolutionExtensions
         if (fullName is null) return -1;
         
         return int.Parse(fullName.Split('.')[3][1..]);
+    }
+
+    public static string Name(this Solution solution)
+    {
+        return Utils.CamelCase().Replace(solution.GetType().Name, " $1");
     }
 }

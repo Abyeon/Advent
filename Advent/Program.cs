@@ -1,4 +1,5 @@
 ﻿using System.CommandLine;
+using System.Diagnostics;
 using System.Reflection;
 using Advent.Lib;
 
@@ -64,10 +65,11 @@ root.SetAction(async (result) =>
     string cookie = await AdventOfCode.GetCookie(Path.Combine(currentDir, "cookie.txt"));
 
     Console.WriteLine($"Running {toRun.Count} {(toRun.Count == 1 ? "puzzle" : "puzzles")} for year: {year}, day: {(runAll ? "ALL" : day)}");
-    
+
+    long start = Stopwatch.GetTimestamp();
     foreach (var solution in toRun)
     {
-        Console.WriteLine($"Day: {solution.Day()}");
+        Console.WriteLine($"Day {solution.Day()}: {solution.Name()}");
         
         string path = Path.Combine(currentDir, $@"inputs\{solution.Year()}\");
         if (!Directory.Exists(path))
@@ -82,9 +84,11 @@ root.SetAction(async (result) =>
         string[] lines = input.Split(['\r', '\n'], StringSplitOptions.RemoveEmptyEntries);
         solution.Solve(lines);
     }
+
+    var elapsed = Stopwatch.GetElapsedTime(start);
+    
+    Console.WriteLine("Finished processing puzzles!");
+    Console.WriteLine($"Total processing time: {Utils.GetReadableTimeSpan(elapsed)}\n");
 });
 
 root.Parse(args).Invoke();
-
-Console.WriteLine("\nFinished processing puzzles!\n");
-// Console.ReadKey();
