@@ -2,7 +2,7 @@
 
 namespace Advent.Solutions._2025._2;
 
-public class GiftShop : Solution
+public class GiftShop : ISolution
 {
     public string PartOne(string[] input)
     {

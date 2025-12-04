@@ -2,7 +2,7 @@
 
 namespace Advent.Solutions._2025._3;
 
-public class Lobby : Solution
+public class Lobby : ISolution
 {
     public string PartOne(string[] input)
     {

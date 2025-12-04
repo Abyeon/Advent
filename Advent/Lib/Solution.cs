@@ -4,7 +4,7 @@ using System.Text.RegularExpressions;
 
 namespace Advent.Lib;
 
-public interface Solution
+public interface ISolution
 {
     string PartOne(string[] input);
     string PartTwo(string[] input);
@@ -13,7 +13,7 @@ public interface Solution
 
 public static class SolutionExtensions
 {
-    public static void Solve(this Solution solution, string[] input)
+    public static void Solve(this ISolution solution, string[] input)
     {
         long start = Stopwatch.GetTimestamp();
         string partOne = solution.PartOne(input);
@@ -29,7 +29,7 @@ public static class SolutionExtensions
         Console.WriteLine();
     }
 
-    public static int Year(this Solution solution)
+    public static int Year(this ISolution solution)
     {
         string? fullName = solution.GetType().FullName;
         if (fullName is null) return -1;
@@ -37,7 +37,7 @@ public static class SolutionExtensions
         return int.Parse(fullName.Split('.')[2][1..]);
     }
 
-    public static int Day(this Solution solution)
+    public static int Day(this ISolution solution)
     {
         string? fullName = solution.GetType().FullName;
         if (fullName is null) return -1;
@@ -45,7 +45,7 @@ public static class SolutionExtensions
         return int.Parse(fullName.Split('.')[3][1..]);
     }
 
-    public static string Name(this Solution solution)
+    public static string Name(this ISolution solution)
     {
         return Utils.CamelCase().Replace(solution.GetType().Name, " $1");
     }

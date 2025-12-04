@@ -6,7 +6,7 @@ using System.Text;
 using Advent.Lib;
 
 var solutions = Assembly.GetEntryAssembly()!.GetTypes()
-    .Where(t => t.GetTypeInfo().IsClass && typeof(Solution).IsAssignableFrom(t))
+    .Where(t => t.GetTypeInfo().IsClass && typeof(ISolution).IsAssignableFrom(t))
     .OrderBy(t => t.FullName)
     .ToArray();
 
@@ -48,10 +48,10 @@ root.SetAction(async (result) =>
     bool runAll = result.GetValue(allOpt);
     bool test = result.GetValue(testOpt);
     
-    List<Solution> toRun = [];
+    List<ISolution> toRun = [];
     foreach (var type in solutions)
     {
-        var solution = (Solution)Activator.CreateInstance(type)!;
+        var solution = (ISolution)Activator.CreateInstance(type)!;
         if (runAll)
         {
             toRun.Add(solution);

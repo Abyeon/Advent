@@ -2,7 +2,7 @@
 
 namespace Advent.Solutions._2025._1;
 
-public class SecretEntrance : Solution
+public class SecretEntrance : ISolution
 {
     public string PartOne(string[] input)
     {
