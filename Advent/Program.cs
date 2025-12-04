@@ -105,7 +105,7 @@ root.SetAction(async (result) =>
 
     var elapsed = Stopwatch.GetElapsedTime(start);
     
-    Console.WriteLine("Finished processing puzzles!");
+    Console.WriteLine($"Finished processing {(toRun.Count == 1 ? "puzzle" : "puzzles")}!");
     Console.WriteLine($"Total processing time: {Utils.GetReadableTimeSpan(elapsed).FgColor(Color.PaleGreen)}\n");
 });
 

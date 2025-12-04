@@ -50,16 +50,9 @@ public class GiftShop : Solution
             for (long i = min; i <= max; i++)
             {
                 var current = i.ToString();
-
-                for (var j = 1; j < current.Length; j++)
+                if ((current + current)[1..^1].Contains(current))
                 {
-                    if (current.Length % j != 0) continue;
-                    
-                    var split = SplitInParts(current, j);
-                    if (split.Any(x => !x.Equals(split.First()))) continue;
-                    
                     total += long.Parse(current);
-                    break;
                 }
             }
         }
