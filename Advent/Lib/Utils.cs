@@ -1,4 +1,6 @@
-﻿using System.Text.RegularExpressions;
+﻿using System.Drawing;
+using System.Numerics;
+using System.Text.RegularExpressions;
 
 namespace Advent.Lib;
 
@@ -21,4 +23,14 @@ public static partial class Utils
     
     [GeneratedRegex("(\\B[A-Z])")]
     public static partial Regex CamelCase();
+
+    public static string FgColor(this string input, Color color)
+    {
+        return $"\e[38;2;{color.R};{color.G};{color.B}m{input}\e[0m";
+    }
+    
+    public static string BgColor(this string input, Color color)
+    {
+        return $"\e[48;2;{color.R};{color.G};{color.B}m{input}\e[0m";
+    }
 }

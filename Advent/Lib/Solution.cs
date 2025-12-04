@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics;
+using System.Drawing;
 using System.Text.RegularExpressions;
 
 namespace Advent.Lib;
@@ -7,24 +8,24 @@ public interface Solution
 {
     string PartOne(string[] input);
     string PartTwo(string[] input);
+    string TestInput();
 }
 
-public static partial class SolutionExtensions
+public static class SolutionExtensions
 {
-    
     public static void Solve(this Solution solution, string[] input)
     {
         long start = Stopwatch.GetTimestamp();
         string partOne = solution.PartOne(input);
         var elapsed = Stopwatch.GetElapsedTime(start);
         
-        Console.WriteLine($"Part One: {partOne} in {Utils.GetReadableTimeSpan(elapsed)}");
+        Console.WriteLine($"Part One: {partOne} → {Utils.GetReadableTimeSpan(elapsed).FgColor(Color.PaleGreen)}");
         
         start = Stopwatch.GetTimestamp();
         string partTwo = solution.PartTwo(input);
         elapsed = Stopwatch.GetElapsedTime(start);
         
-        Console.WriteLine($"Part Two: {partTwo} in {Utils.GetReadableTimeSpan(elapsed)}");
+        Console.WriteLine($"Part Two: {partTwo} → {Utils.GetReadableTimeSpan(elapsed).FgColor(Color.PaleGreen)}");
         Console.WriteLine();
     }
 

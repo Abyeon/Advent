@@ -1,6 +1,8 @@
 ﻿using System.CommandLine;
 using System.Diagnostics;
+using System.Drawing;
 using System.Reflection;
+using System.Text;
 using Advent.Lib;
 
 var solutions = Assembly.GetEntryAssembly()!.GetTypes()
@@ -28,15 +30,23 @@ var allOpt = new Option<bool>(name: "--all", ["-a"])
     DefaultValueFactory = _ => false
 };
 
+var testOpt = new Option<bool>(name: "--test", ["-t"])
+{
+    Description = "Run using provided test inputs",
+    DefaultValueFactory = _ => false
+};
+
 root.Add(yearOpt);
 root.Add(dayOpt);
 root.Add(allOpt);
+root.Add(testOpt);
 
 root.SetAction(async (result) =>
 {
     int year = result.GetValue(yearOpt);
     int day = result.GetValue(dayOpt);
     bool runAll = result.GetValue(allOpt);
+    bool test = result.GetValue(testOpt);
     
     List<Solution> toRun = [];
     foreach (var type in solutions)
@@ -64,12 +74,12 @@ root.SetAction(async (result) =>
     string currentDir = Directory.GetCurrentDirectory();
     string cookie = await AdventOfCode.GetCookie(Path.Combine(currentDir, "cookie.txt"));
 
-    Console.WriteLine($"Running {toRun.Count} {(toRun.Count == 1 ? "puzzle" : "puzzles")} for year: {year}, day: {(runAll ? "ALL" : day)}");
+    Console.WriteLine($"\nRunning {toRun.Count} {(toRun.Count == 1 ? "puzzle" : "puzzles")} for year: {year}, day: {(runAll ? "ALL" : day)}\n");
 
     long start = Stopwatch.GetTimestamp();
     foreach (var solution in toRun)
     {
-        Console.WriteLine($"Day {solution.Day()}: {solution.Name()}");
+        Console.WriteLine($"Day {solution.Day()}: {solution.Name().FgColor(Color.CornflowerBlue)}");
         
         string path = Path.Combine(currentDir, $@"inputs\{solution.Year()}\");
         if (!Directory.Exists(path))
@@ -79,7 +89,15 @@ root.SetAction(async (result) =>
         }
     
         path = Path.Combine(path, $"{solution.Day()}.txt");
+        
+        // Grab the input no matter what, in case we haven't cached yet
         string input = await AdventOfCode.GetInput(solution.Year(), solution.Day(), cookie, path);
+        
+        // Swap the input to the test input if desired
+        if (test)
+        {
+            input = solution.TestInput();
+        }
     
         string[] lines = input.Split(['\r', '\n'], StringSplitOptions.RemoveEmptyEntries);
         solution.Solve(lines);
@@ -88,7 +106,8 @@ root.SetAction(async (result) =>
     var elapsed = Stopwatch.GetElapsedTime(start);
     
     Console.WriteLine("Finished processing puzzles!");
-    Console.WriteLine($"Total processing time: {Utils.GetReadableTimeSpan(elapsed)}\n");
+    Console.WriteLine($"Total processing time: {Utils.GetReadableTimeSpan(elapsed).FgColor(Color.PaleGreen)}\n");
 });
 
+Console.OutputEncoding = Encoding.UTF8;
 root.Parse(args).Invoke();
