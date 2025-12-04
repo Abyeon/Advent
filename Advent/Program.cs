@@ -118,7 +118,7 @@ root.SetAction(async (result) =>
             {
                 time += solution.Solve(lines);
             }
-            catch (NotImplementedException e)
+            catch (NotImplementedException)
             {
                 Console.Error.WriteLine($"Solution not yet implemented.".FgColor(Color.PaleVioletRed));
             }
