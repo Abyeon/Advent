@@ -20,6 +20,20 @@ public static partial class Utils
         
         return ts.TotalMicroseconds + " µs";
     }
+
+    public static string GetColoredTimeSpan(TimeSpan ts)
+    {
+        double ms = ts.TotalMilliseconds;
+
+        var color = ms switch
+        {
+            > 1000 => Color.PaleVioletRed,
+            > 100 => Color.PaleGoldenrod,
+            _ => Color.PaleGreen
+        };
+
+        return GetReadableTimeSpan(ts).FgColor(color);
+    }
     
     [GeneratedRegex("(\\B[A-Z])")]
     public static partial Regex CamelCase();

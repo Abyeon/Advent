@@ -19,13 +19,13 @@ public static class SolutionExtensions
         string partOne = solution.PartOne(input);
         var elapsed = Stopwatch.GetElapsedTime(start);
         
-        Console.WriteLine($"Part One: {partOne} → {Utils.GetReadableTimeSpan(elapsed).FgColor(Color.PaleGreen)}");
+        Console.WriteLine($"Part One: {partOne}".PadRight(30) + $" → {Utils.GetColoredTimeSpan(elapsed)}");
         
         start = Stopwatch.GetTimestamp();
         string partTwo = solution.PartTwo(input);
         var elapsed2 = Stopwatch.GetElapsedTime(start);
         
-        Console.WriteLine($"Part Two: {partTwo} → {Utils.GetReadableTimeSpan(elapsed2).FgColor(Color.PaleGreen)}");
+        Console.WriteLine($"Part Two: {partTwo}".PadRight(30) + $" → {Utils.GetColoredTimeSpan(elapsed)}");
         
         return (elapsed + elapsed2).Ticks;
     }

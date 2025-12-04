@@ -122,13 +122,15 @@ root.SetAction(async (result) =>
         
         if (repeat > 1) Console.SetOut(originalOut);
         
-        Console.WriteLine($"Total: {Utils.GetReadableTimeSpan(elapsed).FgColor(Color.PaleGreen)}");
-        if (repeat > 1) Console.WriteLine($"  Avg: {Utils.GetReadableTimeSpan(average).FgColor(Color.PaleGreen)}");
+        Console.WriteLine("Total".PadRight(30) + $" → {Utils.GetColoredTimeSpan(elapsed)}");
+        if (repeat > 1) Console.WriteLine("Average".PadRight(30) + $" → {Utils.GetColoredTimeSpan(average)}");
         Console.WriteLine();
     }
     
     Console.WriteLine($"Finished processing {(toRun.Count == 1 ? "puzzle" : "puzzles")}!");
-    Console.WriteLine($"Total processing time: {Utils.GetReadableTimeSpan(TimeSpan.FromTicks(time)).FgColor(Color.PaleGreen)}\n");
+    
+    if (toRun.Count > 1) Console.WriteLine($"Total processing time: {Utils.GetColoredTimeSpan(TimeSpan.FromTicks(time))}");
+    Console.WriteLine();
 });
 
 Console.OutputEncoding = Encoding.UTF8;
