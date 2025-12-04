@@ -25,7 +25,7 @@ public static class SolutionExtensions
         string partTwo = solution.PartTwo(input);
         var elapsed2 = Stopwatch.GetElapsedTime(start);
         
-        Console.WriteLine($"Part Two: {partTwo}".PadRight(30) + $" → {Utils.GetColoredTimeSpan(elapsed)}");
+        Console.WriteLine($"Part Two: {partTwo}".PadRight(30) + $" → {Utils.GetColoredTimeSpan(elapsed2)}");
         
         return (elapsed + elapsed2).Ticks;
     }
