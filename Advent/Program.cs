@@ -63,7 +63,7 @@ root.SetAction(async (result) =>
     string currentDir = Directory.GetCurrentDirectory();
     string cookie = await AdventOfCode.GetCookie(Path.Combine(currentDir, "cookie.txt"));
 
-    Console.WriteLine($"Running {toRun.Count} puzzle(s) for year: {year}, day: {(runAll ? "ALL" : day)}");
+    Console.WriteLine($"Running {toRun.Count} {(toRun.Count == 1 ? "puzzle" : "puzzles")} for year: {year}, day: {(runAll ? "ALL" : day)}");
     
     foreach (var solution in toRun)
     {

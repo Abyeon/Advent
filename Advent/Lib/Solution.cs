@@ -10,33 +10,46 @@ public interface Solution
 
 public static class SolutionExtensions
 {
-    private static string PrettifyTicks(long ticks)
+    // private static string PrettifyTicks(long ticks)
+    // {
+    //     double diff = ticks * 1000.0 / Stopwatch.Frequency;
+    //     return $"{diff:F3} ms";
+    // }
+
+    private static string GetReadableTimeSpan(TimeSpan ts)
     {
-        var diff = ticks * 1000.0 / Stopwatch.Frequency;
-        return $"{diff:F3} ms";
+        if (ts.TotalSeconds >= 1)
+        {
+            return $"{ts.TotalSeconds} seconds";
+        }
+        
+        if (ts.TotalMilliseconds >= 1)
+        {
+            return $"{ts.TotalMilliseconds} ms";
+        }
+        
+        return (ts.Ticks / 10) + " µs";
     }
     
     public static void Solve(this Solution solution, string[] input)
     {
-        var partOne = "";
-        var partTwo = "";
+        long start = Stopwatch.GetTimestamp();
+        string partOne = solution.PartOne(input);
+        var elapsed = Stopwatch.GetElapsedTime(start);
         
-        var watch = Stopwatch.StartNew();
-        partOne = solution.PartOne(input);
-        watch.Stop();
-        Console.WriteLine("Part One: " + PrettifyTicks(watch.ElapsedTicks));
-        Console.WriteLine("  Output: " + partOne);
+        Console.WriteLine($"Part One: {partOne} in {GetReadableTimeSpan(elapsed)}");
         
-        watch.Restart();
-        partTwo = solution.PartTwo(input);
-        watch.Stop();
-        Console.WriteLine("Part Two: " + PrettifyTicks(watch.ElapsedTicks));
-        Console.WriteLine("  Output: " + partTwo);
+        start = Stopwatch.GetTimestamp();
+        string partTwo = solution.PartTwo(input);
+        elapsed = Stopwatch.GetElapsedTime(start);
+        
+        Console.WriteLine($"Part Two: {partTwo} in {GetReadableTimeSpan(elapsed)}");
+        Console.WriteLine();
     }
 
     public static int Year(this Solution solution)
     {
-        var fullName = solution.GetType().FullName;
+        string? fullName = solution.GetType().FullName;
         if (fullName is null) return -1;
         
         return int.Parse(fullName.Split('.')[2][1..]);
@@ -44,7 +57,7 @@ public static class SolutionExtensions
 
     public static int Day(this Solution solution)
     {
-        var fullName = solution.GetType().FullName;
+        string? fullName = solution.GetType().FullName;
         if (fullName is null) return -1;
         
         return int.Parse(fullName.Split('.')[3][1..]);
