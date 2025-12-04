@@ -36,10 +36,17 @@ var testOpt = new Option<bool>(name: "--test", ["-t"])
     DefaultValueFactory = _ => false
 };
 
+var repeatOpt = new Option<int>(name: "--repeat", ["-r"])
+{
+    Description = "Repeat processing each day for n times.",
+    DefaultValueFactory = _ => 0
+};
+
 root.Add(yearOpt);
 root.Add(dayOpt);
 root.Add(allOpt);
 root.Add(testOpt);
+root.Add(repeatOpt);
 
 root.SetAction(async (result) =>
 {
@@ -47,6 +54,7 @@ root.SetAction(async (result) =>
     int day = result.GetValue(dayOpt);
     bool runAll = result.GetValue(allOpt);
     bool test = result.GetValue(testOpt);
+    int repeat = result.GetValue(repeatOpt) + 1;
     
     List<ISolution> toRun = [];
     foreach (var type in solutions)
@@ -76,37 +84,51 @@ root.SetAction(async (result) =>
 
     Console.WriteLine($"\nRunning {toRun.Count} {(toRun.Count == 1 ? "puzzle" : "puzzles")} for year: {year}, day: {(runAll ? "ALL" : day)}\n");
 
-    long start = Stopwatch.GetTimestamp();
+    long time = 0;
     foreach (var solution in toRun)
     {
         Console.WriteLine($"Day {solution.Day()}: {solution.Name().FgColor(Color.CornflowerBlue)}");
         
-        string path = Path.Combine(currentDir, $@"inputs\{solution.Year()}\");
-        if (!Directory.Exists(path))
-        {
-            Directory.CreateDirectory(path);
-            Console.WriteLine($"Created: {path}");
-        }
-    
-        path = Path.Combine(path, $"{solution.Day()}.txt");
-        
-        // Grab the input no matter what, in case we haven't cached yet
-        string input = await AdventOfCode.GetInput(solution.Year(), solution.Day(), cookie, path);
-        
-        // Swap the input to the test input if desired
+        string input;
         if (test)
         {
             input = solution.TestInput();
         }
+        else
+        {
+            string path = Path.Combine(currentDir, $@"inputs\{solution.Year()}\");
+            if (!Directory.Exists(path))
+            {
+                Directory.CreateDirectory(path);
+                Console.WriteLine($"Created: {path}");
+            }
     
-        string[] lines = input.Split(['\r', '\n'], StringSplitOptions.RemoveEmptyEntries);
-        solution.Solve(lines);
-    }
+            path = Path.Combine(path, $"{solution.Day()}.txt");
+            input = await AdventOfCode.GetInput(solution.Year(), solution.Day(), cookie, path);
+        }
 
-    var elapsed = Stopwatch.GetElapsedTime(start);
+        var originalOut = Console.Out;
+        if (repeat > 1) Console.SetOut(TextWriter.Null);
+
+        long start = time;
+        for (var i = 0; i < repeat; i++)
+        {
+            string[] lines = input.Split(['\r', '\n'], StringSplitOptions.RemoveEmptyEntries);
+            time += solution.Solve(lines);
+        }
+
+        var elapsed = TimeSpan.FromTicks(time - start);
+        var average = elapsed / repeat;
+        
+        if (repeat > 1) Console.SetOut(originalOut);
+        
+        Console.WriteLine($"Total: {Utils.GetReadableTimeSpan(elapsed).FgColor(Color.PaleGreen)}");
+        if (repeat > 1) Console.WriteLine($"  Avg: {Utils.GetReadableTimeSpan(average).FgColor(Color.PaleGreen)}");
+        Console.WriteLine();
+    }
     
     Console.WriteLine($"Finished processing {(toRun.Count == 1 ? "puzzle" : "puzzles")}!");
-    Console.WriteLine($"Total processing time: {Utils.GetReadableTimeSpan(elapsed).FgColor(Color.PaleGreen)}\n");
+    Console.WriteLine($"Total processing time: {Utils.GetReadableTimeSpan(TimeSpan.FromTicks(time)).FgColor(Color.PaleGreen)}\n");
 });
 
 Console.OutputEncoding = Encoding.UTF8;

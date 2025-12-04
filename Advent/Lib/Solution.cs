@@ -13,7 +13,7 @@ public interface ISolution
 
 public static class SolutionExtensions
 {
-    public static void Solve(this ISolution solution, string[] input)
+    public static long Solve(this ISolution solution, string[] input)
     {
         long start = Stopwatch.GetTimestamp();
         string partOne = solution.PartOne(input);
@@ -23,10 +23,11 @@ public static class SolutionExtensions
         
         start = Stopwatch.GetTimestamp();
         string partTwo = solution.PartTwo(input);
-        elapsed = Stopwatch.GetElapsedTime(start);
+        var elapsed2 = Stopwatch.GetElapsedTime(start);
         
-        Console.WriteLine($"Part Two: {partTwo} → {Utils.GetReadableTimeSpan(elapsed).FgColor(Color.PaleGreen)}");
-        Console.WriteLine();
+        Console.WriteLine($"Part Two: {partTwo} → {Utils.GetReadableTimeSpan(elapsed2).FgColor(Color.PaleGreen)}");
+        
+        return (elapsed + elapsed2).Ticks;
     }
 
     public static int Year(this ISolution solution)
