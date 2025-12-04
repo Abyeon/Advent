@@ -32,7 +32,7 @@ public class PrintingDepartment : ISolution
         
         return total.ToString();
     }
-
+    
     public string PartTwo(string[] input)
     {
         long total = 0;

@@ -114,7 +114,32 @@ root.SetAction(async (result) =>
         for (var i = 0; i < repeat; i++)
         {
             string[] lines = input.Split(['\r', '\n'], StringSplitOptions.RemoveEmptyEntries);
-            time += solution.Solve(lines);
+            try
+            {
+                time += solution.Solve(lines);
+            }
+            catch (NotImplementedException e)
+            {
+                Console.Error.WriteLine($"Solution not yet implemented.".FgColor(Color.PaleVioletRed));
+            }
+            catch (Exception e)
+            {
+                var trace = new StackTrace(e, true);
+                var frame = trace.GetFrame(0);
+                
+                int line = -1;
+                if (frame != null)
+                {
+                    line = frame.GetFileLineNumber();
+                }
+
+                Console.Error.WriteLine($"\nError while processing Day {solution.Day()} {(line != -1 ? $"at line {line}" : "")}:"
+                    .BgColor(Color.PaleVioletRed)
+                    .FgColor(Color.Black) + "\n");
+                
+                Console.Error.WriteLine(e.ToString().FgColor(Color.PaleVioletRed));
+                Console.WriteLine();
+            }
         }
 
         var elapsed = TimeSpan.FromTicks(time - start);

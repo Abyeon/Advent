@@ -11,13 +11,15 @@ public class GiftShop : ISolution
         long total = 0;
         foreach (string line in lines)
         {
-            long min = long.Parse(line.Split('-')[0]);
-            long max = long.Parse(line.Split('-')[1]);
+            string[] pieces = line.Split('-');
+            long min = long.Parse(pieces[0]);
+            long max = long.Parse(pieces[1]);
 
             for (long i = min; i <= max; i++)
             {
                 var current = i.ToString();
 
+                if (current.Length % 2 != 0) continue;
                 string firstHalf = current[..(current.Length / 2)];
                 string secondHalf = current[(current.Length / 2)..];
                 if (firstHalf != secondHalf) continue;
@@ -27,15 +29,6 @@ public class GiftShop : ISolution
         }
         
         return total.ToString();
-    }
-
-    private static List<string> SplitInParts(string s, int partLength)
-    {
-        var list = new List<string>(s.Length / partLength);
-        for (var i = 0; i < s.Length; i += partLength)
-            list.Add(s.Substring(i, Math.Min(partLength, s.Length - i)));
-        
-        return list;
     }
     
     public string PartTwo(string[] input)
