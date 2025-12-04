@@ -28,7 +28,7 @@ public static class SolutionExtensions
             return $"{ts.TotalMilliseconds} ms";
         }
         
-        return (ts.Ticks / 10) + " µs";
+        return ts.TotalMicroseconds + " µs";
     }
     
     public static void Solve(this Solution solution, string[] input)
