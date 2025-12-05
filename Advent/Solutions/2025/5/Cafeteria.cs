@@ -49,7 +49,7 @@ public class Cafeteria : ISolution
             ranges.Add(new Range(min, max));
         }
 
-        ranges = ranges.OrderBy(x => x.Min).ThenBy(x => x.Max).ToList();
+        ranges = ranges.OrderBy(x => x.Min).ToList();
         List<Range> merged = [ranges[0]];
 
         for (var j = 1; j < ranges.Count; j++)
