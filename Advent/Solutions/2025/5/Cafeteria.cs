@@ -40,8 +40,8 @@ public class Cafeteria : ISolution
     public string PartTwo(string[] input)
     {
         List<Range> ranges = [];
-        var i = 0;
-        for (;input[i].Contains('-'); i++)
+        
+        for (var i = 0; input[i].Contains('-'); i++)
         {
             string[] range = input[i].Split('-');
             long min = long.Parse(range[0]);
