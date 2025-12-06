@@ -7,28 +7,42 @@ public class TrashCompactor : ISolution
     [Test("4277556", "4771265398012")]
     public string PartOne(string[] input)
     {
-        long total = 0;
-        int height = input.Length - 1;
-        int width = input[0].Split([' '], StringSplitOptions.RemoveEmptyEntries).Length;
+        string[] instructions = input[^1].Split(' ', StringSplitOptions.RemoveEmptyEntries);
         
+        int height = input.Length - 1;
+        int width = instructions.Length;
+        var blocks = new int[height, width];
+        
+        long total = 0;
+
+        for (var i = 0; i < height; i++)
+        {
+            string[] cols = input[i].Split(' ', StringSplitOptions.RemoveEmptyEntries);
+            for (var j = 0; j < width; j++)
+            {
+                blocks[i, j] = int.Parse(cols[j]);
+            }
+        }
+
         for (var i = 0; i < width; i++)
         {
-            long curr = int.Parse(input[0].Split([' '], StringSplitOptions.RemoveEmptyEntries)[i]);
-            bool add = input[height].Split([' '], StringSplitOptions.RemoveEmptyEntries)[i][0] == '+';
-            for (var j = 1; j < height; j++)
+            string instruction = instructions[i];
+            if (instruction == "+")
             {
-                int num = int.Parse(input[j].Split([' '], StringSplitOptions.RemoveEmptyEntries)[i]);
-                if (add)
+                for (var j = 0; j < height; j++)
                 {
-                    curr += num;
-                }
-                else
-                {
-                    curr *= num;
+                    total += blocks[j, i];
                 }
             }
-
-            total += curr;
+            else
+            {
+                long temp = blocks[0, i];
+                for (var j = 1; j < height; j++)
+                {
+                    temp *= blocks[j, i];
+                }
+                total += temp;
+            }
         }
         
         return total.ToString();
@@ -40,7 +54,7 @@ public class TrashCompactor : ISolution
         public int Y { get; private set; } = y;
         public void Iterate(int heightConstraint)
         {
-            if (Y + 1 >= heightConstraint)
+            if (Y + 1 == heightConstraint)
             {
                 Y = 0;
                 X--;
@@ -69,12 +83,12 @@ public class TrashCompactor : ISolution
             {
                 case '+':
                     AddCurr();
-                    while (workingInts.Count > 0) total += workingInts.Dequeue();
+                    while (workingInts.Count != 0) total += workingInts.Dequeue();
                     break;
                 case '*':
                     AddCurr();
                     long temp = workingInts.Dequeue();
-                    while (workingInts.Count > 0) temp *= workingInts.Dequeue();
+                    while (workingInts.Count != 0) temp *= workingInts.Dequeue();
                     total += temp;
                     break;
                 case ' ':
