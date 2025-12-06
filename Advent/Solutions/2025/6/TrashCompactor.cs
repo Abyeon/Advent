@@ -60,7 +60,7 @@ public class TrashCompactor : ISolution
         long total = 0;
         
         List<int> workingInts = [];
-        var curr = "";
+        var curr = 0;
 
         for (var pos = new Pos(width, 0); pos.X >= 0; pos.Iterate(height))
         {
@@ -83,7 +83,7 @@ public class TrashCompactor : ISolution
                     AddCurr();
                     break;
                 default:
-                    curr += c;
+                    curr = curr * 10 + (c - '0');
                     break;
             }
         }
@@ -92,9 +92,9 @@ public class TrashCompactor : ISolution
 
         void AddCurr()
         {
-            if (curr.Length == 0) return;
-            workingInts.Add(int.Parse(curr));
-            curr = "";
+            if (curr == 0) return;
+            workingInts.Add(curr);
+            curr = 0;
         }
     }
 
