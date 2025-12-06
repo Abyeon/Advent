@@ -59,7 +59,7 @@ public class TrashCompactor : ISolution
 
         long total = 0;
         
-        List<int> workingInts = [];
+        Queue<int> workingInts = new();
         var curr = 0;
 
         for (var pos = new Pos(width, 0); pos.X >= 0; pos.Iterate(height))
@@ -69,21 +69,19 @@ public class TrashCompactor : ISolution
             {
                 case '+':
                     AddCurr();
-                    total += workingInts.Sum();
-                    workingInts.Clear();
+                    while (workingInts.Count > 0) total += workingInts.Dequeue();
                     break;
                 case '*':
                     AddCurr();
-                    long temp = workingInts[0];
-                    for (var i = 1; i < workingInts.Count; i++) temp *= workingInts[i];
+                    long temp = workingInts.Dequeue();
+                    while (workingInts.Count > 0) temp *= workingInts.Dequeue();
                     total += temp;
-                    workingInts.Clear();
                     break;
                 case ' ':
                     AddCurr();
                     break;
                 default:
-                    curr = curr * 10 + (c - '0');
+                    curr = curr * 10 + (c - 48);
                     break;
             }
         }
@@ -93,7 +91,7 @@ public class TrashCompactor : ISolution
         void AddCurr()
         {
             if (curr == 0) return;
-            workingInts.Add(curr);
+            workingInts.Enqueue(curr);
             curr = 0;
         }
     }
