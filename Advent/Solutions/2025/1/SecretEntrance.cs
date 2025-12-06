@@ -4,6 +4,7 @@ namespace Advent.Solutions._2025._1;
 
 public class SecretEntrance : ISolution
 {
+    [Test("3", "1139")]
     public string PartOne(string[] input)
     {
         var totalZero = 0;
@@ -23,6 +24,7 @@ public class SecretEntrance : ISolution
         return totalZero.ToString();
     }
 
+    [Test("6", "6684")]
     public string PartTwo(string[] input)
     {
         var totalZero = 0;

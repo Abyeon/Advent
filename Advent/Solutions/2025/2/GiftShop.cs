@@ -4,6 +4,7 @@ namespace Advent.Solutions._2025._2;
 
 public class GiftShop : ISolution
 {
+    [Test("1227775554", "34826702005")]
     public string PartOne(string[] input)
     {
         string[] lines = input[0].Split(',');
@@ -31,6 +32,7 @@ public class GiftShop : ISolution
         return total.ToString();
     }
     
+    [Test("4174379265", "43287141963")]
     public string PartTwo(string[] input)
     {
         long total = 0;

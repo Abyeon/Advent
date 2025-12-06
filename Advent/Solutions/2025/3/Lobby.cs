@@ -4,6 +4,7 @@ namespace Advent.Solutions._2025._3;
 
 public class Lobby : ISolution
 {
+    [Test("357", "17034")]
     public string PartOne(string[] input)
     {
         var total = 0;
@@ -28,6 +29,7 @@ public class Lobby : ISolution
         return total.ToString();
     }
 
+    [Test("3121910778619", "168798209663590")]
     public string PartTwo(string[] input)
     {
         ulong total = 0;

@@ -56,6 +56,8 @@ root.SetAction(async (result) =>
     bool test = result.GetValue(testOpt);
     int repeat = result.GetValue(repeatOpt) + 1;
     
+    Analyzer.TestMode = test;
+    
     List<ISolution> toRun = [];
     foreach (var type in solutions)
     {
@@ -147,7 +149,7 @@ root.SetAction(async (result) =>
         
         if (repeat > 1) Console.SetOut(originalOut);
         
-        Console.WriteLine("Total".PadRight(30) + $" → {Utils.GetColoredTimeSpan(elapsed)}");
+        Console.WriteLine("Total".PadRight(32) + $" → {Utils.GetColoredTimeSpan(elapsed)}");
         if (repeat > 1) Console.WriteLine("Average".PadRight(30) + $" → {Utils.GetColoredTimeSpan(average)}");
         Console.WriteLine();
     }

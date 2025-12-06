@@ -4,6 +4,7 @@ namespace Advent.Solutions._2025._4;
 
 public class PrintingDepartment : ISolution
 {
+    [Test("13", "1518")]
     public string PartOne(string[] input)
     {
         long total = 0;
@@ -33,6 +34,7 @@ public class PrintingDepartment : ISolution
         return total.ToString();
     }
     
+    [Test("43", "8665")]
     public string PartTwo(string[] input)
     {
         long total = 0;

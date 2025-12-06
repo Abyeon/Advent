@@ -15,6 +15,7 @@ public class Cafeteria : ISolution
         }
     }
     
+    [Test("3", "690")]
     public string PartOne(string[] input)
     {
         List<Range> ranges = [];
@@ -37,6 +38,7 @@ public class Cafeteria : ISolution
         return total.ToString();
     }
 
+    [Test("14", "344323629240733")]
     public string PartTwo(string[] input)
     {
         List<Range> ranges = [];

@@ -1,5 +1,6 @@
 ﻿using System.Diagnostics;
 using System.Drawing;
+using System.Reflection;
 using System.Text.RegularExpressions;
 
 namespace Advent.Lib;
@@ -15,19 +16,13 @@ public static class SolutionExtensions
 {
     public static long Solve(this ISolution solution, string[] input)
     {
-        long start = Stopwatch.GetTimestamp();
-        string partOne = solution.PartOne(input);
-        var elapsed = Stopwatch.GetElapsedTime(start);
+        var analysis = Analyzer.Analyze(solution.PartOne, input);
+        Console.WriteLine(analysis.ToString());
         
-        Console.WriteLine($"Part One: {partOne}".PadRight(30) + $" → {Utils.GetColoredTimeSpan(elapsed)}");
+        var analysis2 = Analyzer.Analyze(solution.PartTwo, input);
+        Console.WriteLine(analysis2.ToString());
         
-        start = Stopwatch.GetTimestamp();
-        string partTwo = solution.PartTwo(input);
-        var elapsed2 = Stopwatch.GetElapsedTime(start);
-        
-        Console.WriteLine($"Part Two: {partTwo}".PadRight(30) + $" → {Utils.GetColoredTimeSpan(elapsed2)}");
-        
-        return (elapsed + elapsed2).Ticks;
+        return (analysis.Elapsed + analysis2.Elapsed).Ticks;
     }
 
     public static int Year(this ISolution solution)
