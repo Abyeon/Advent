@@ -31,9 +31,8 @@ public class Laboratories : ISolution
 
     private class Node (int row, int col)
     {
-        public int Row { get; set; } = row;
-        public int Column { get; set; } = col;
-        public List<Node> Children { get; set; } = [];
+        public int Row { get; } = row;
+        public int Column { get; } = col;
         public long Total { get; set; } = 1;
     }
 
@@ -56,8 +55,6 @@ public class Laboratories : ISolution
 
         long BuildChild(Node node, int col)
         {
-            Node? child = null;
-
             long sum = 0;
             for (int i = node.Row + 2; i < input.Length; i += 2)
             {
@@ -65,6 +62,7 @@ public class Laboratories : ISolution
 
                 var coords = (i, col);
 
+                Node child;
                 if (nodeCache.TryGetValue(coords, out var value))
                 {
                     child = value;
@@ -78,18 +76,10 @@ public class Laboratories : ISolution
                 }
                 
                 sum += child.Total;
-                
-                node.Children.Add(child);
                 break;
             }
 
-            if (child == null)
-            {
-                node.Children.Add(new Node(input.Length, col));
-                return 1;
-            }
-
-            return sum;
+            return sum != 0 ? sum : 1;
         }
     }
 
