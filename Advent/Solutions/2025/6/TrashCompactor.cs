@@ -1,4 +1,5 @@
-﻿using Advent.Lib;
+﻿using System.Numerics;
+using Advent.Lib;
 
 namespace Advent.Solutions._2025._6;
 
@@ -50,8 +51,8 @@ public class TrashCompactor : ISolution
 
     private struct Pos (int x, int y)
     {
-        public int X { get; private set; } = x;
-        public int Y { get; private set; } = y;
+        public int X { get; set; } = x;
+        public int Y { get; set; } = y;
         public void Iterate(int heightConstraint)
         {
             if (Y + 1 == heightConstraint)
@@ -65,31 +66,50 @@ public class TrashCompactor : ISolution
         }
     }
 
+    //private IDictionary<char, Action> instructionMap = [];
+
     [Test("3263827", "10695785245101")]
     public string PartTwo(string[] input)
     {
         int width = input[0].Length - 1;
         int height = input.Length;
-
+        
         long total = 0;
         
         Queue<int> workingInts = new();
         var curr = 0;
-
+        
+        // instructionMap.Add('+', () =>
+        // { 
+        //     while (workingInts.Count != 0) total += workingInts.Dequeue();
+        // });
+        //
+        // instructionMap.Add('*', () =>
+        // { 
+        //     long temp = workingInts.Dequeue();
+        //     while (workingInts.Count != 0) temp *= workingInts.Dequeue();
+        //     total += temp;
+        // });
+        
+        
         for (var pos = new Pos(width, 0); pos.X >= 0; pos.Iterate(height))
         {
             char c = input[pos.Y][pos.X];
+            //instructionMap[c]();
+            
             switch (c)
             {
                 case '+':
                     AddCurr();
                     while (workingInts.Count != 0) total += workingInts.Dequeue();
+                    pos.X--;
                     break;
                 case '*':
                     AddCurr();
                     long temp = workingInts.Dequeue();
                     while (workingInts.Count != 0) temp *= workingInts.Dequeue();
                     total += temp;
+                    pos.X--;
                     break;
                 case ' ':
                     AddCurr();

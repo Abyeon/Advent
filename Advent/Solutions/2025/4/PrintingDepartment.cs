@@ -66,7 +66,7 @@ public class PrintingDepartment : ISolution
                     found = true;
                 
                     total++;
-                    toRemove.Add(new ValueTuple<int, int>(i, j));
+                    toRemove.Add((i, j));
                 }
             }
             
