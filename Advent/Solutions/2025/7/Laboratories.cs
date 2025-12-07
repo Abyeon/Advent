@@ -29,13 +29,6 @@ public class Laboratories : ISolution
         return total.ToString();
     }
 
-    private class Node (int row, int col)
-    {
-        public int Row { get; } = row;
-        public int Column { get; } = col;
-        public long Total { get; set; } = 1;
-    }
-
     [Test("40", "95408386769474")]
     public string PartTwo(string[] input)
     {
