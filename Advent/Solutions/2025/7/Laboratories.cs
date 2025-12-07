@@ -14,15 +14,15 @@ public class Laboratories : ISolution
         for (var i = 2; i < input.Length; i += 2)
         {
             char[] line = input[i].ToCharArray();
-            for (var j = 0; j < line.Length; j++)
+            
+            foreach (int col in new HashSet<int>(beams))
             {
-                if (line[j] != '^') continue;
-                if (!beams.Contains(j)) continue;
+                if (line[col] != '^') continue;
                 
                 total++;
-                beams.Remove(j);
-                beams.Add(j - 1);
-                beams.Add(j + 1);
+                beams.Remove(col);
+                beams.Add(col - 1);
+                beams.Add(col + 1);
             }
         }
         
