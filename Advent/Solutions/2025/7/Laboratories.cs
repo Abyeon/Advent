@@ -40,42 +40,35 @@ public class Laboratories : ISolution
     public string PartTwo(string[] input)
     {
         int start = input[0].IndexOf('S');
-        var root = new Node(0, start);
         
-        Dictionary<(int row, int col), Node> nodeCache = [];
-        long total = BuildTree(root);
+        var nodeCache = new long[input.Length, input[0].Length];
+        long total = BuildTree(0, start);
         return total.ToString();
         
-        long BuildTree(Node node)
+        long BuildTree(int row, int col)
         {
-            long left = BuildChild(node, node.Column - 1);
-            long right = BuildChild(node, node.Column + 1);
+            long left = BuildChild(row, col - 1);
+            long right = BuildChild(row, col + 1);
             return left + right;
         }
 
-        long BuildChild(Node node, int col)
+        long BuildChild(int row, int col)
         {
             long sum = 0;
-            for (int i = node.Row + 2; i < input.Length; i += 2)
+            for (int i = row + 2; i < input.Length; i += 2)
             {
                 if (input[i][col] != '^') continue;
-
-                var coords = (i, col);
-
-                Node child;
-                if (nodeCache.TryGetValue(coords, out var value))
+                
+                long cached = nodeCache[row, col];
+                if (cached > 0)
                 {
-                    child = value;
+                    sum = cached;
                 }
                 else
                 {
-                    child = new Node(i, col);
-                    nodeCache.Add(coords, child);
-                    
-                    child.Total = BuildTree(child);
+                    sum = BuildTree(i, col);
+                    nodeCache[row, col] = sum;
                 }
-                
-                sum += child.Total;
                 break;
             }
 
