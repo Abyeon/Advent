@@ -34,6 +34,7 @@ public class Laboratories : ISolution
         public int Row { get; set; } = row;
         public int Column { get; set; } = col;
         public List<Node> Children { get; set; } = [];
+        public long Total { get; set; } = 1;
     }
 
     [Test("40", "95408386769474")]
@@ -43,22 +44,21 @@ public class Laboratories : ISolution
         var root = new Node(0, start);
         
         Dictionary<(int row, int col), Node> nodeCache = [];
-        BuildTree(root);
-        
-        Dictionary<(int row, int col), long> memo = new();
-        long total = FindPaths(root);
-        
+        long total = BuildTree(root);
         return total.ToString();
         
-        void BuildTree(Node node)
+        long BuildTree(Node node)
         {
-            BuildChild(node, node.Column - 1);
-            BuildChild(node, node.Column + 1);
+            long left = BuildChild(node, node.Column - 1);
+            long right = BuildChild(node, node.Column + 1);
+            return left + right;
         }
 
-        void BuildChild(Node node, int col)
+        long BuildChild(Node node, int col)
         {
             Node? child = null;
+
+            long sum = 0;
             for (int i = node.Row + 2; i < input.Length; i += 2)
             {
                 if (input[i][col] != '^') continue;
@@ -74,8 +74,10 @@ public class Laboratories : ISolution
                     child = new Node(i, col);
                     nodeCache.Add(coords, child);
                     
-                    BuildTree(child);
+                    child.Total = BuildTree(child);
                 }
+                
+                sum += child.Total;
                 
                 node.Children.Add(child);
                 break;
@@ -84,26 +86,9 @@ public class Laboratories : ISolution
             if (child == null)
             {
                 node.Children.Add(new Node(input.Length, col));
-            }
-        }
-
-        long FindPaths(Node node)
-        {
-            if (node.Children.Count == 0) return 1;
-            
-            var coords = (node.Row, node.Column);
-            if (memo.TryGetValue(coords, out var value))
-            {
-                return value;
+                return 1;
             }
 
-            long sum = 0;
-            foreach (var child in node.Children)
-            {
-                sum += FindPaths(child);
-            }
-            
-            memo.Add(coords, sum);
             return sum;
         }
     }
