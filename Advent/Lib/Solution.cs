@@ -16,13 +16,32 @@ public static class SolutionExtensions
 {
     public static long Solve(this ISolution solution, string[] input)
     {
-        var analysis = Analyzer.Analyze(solution.PartOne, input);
-        Console.WriteLine(analysis.ToString());
+        TimeSpan one = TimeSpan.Zero;
+        TimeSpan two = TimeSpan.Zero;
         
-        var analysis2 = Analyzer.Analyze(solution.PartTwo, input);
-        Console.WriteLine(analysis2.ToString());
+        try
+        {
+            var analysis = Analyzer.Analyze(solution.PartOne, input);
+            one = analysis.Elapsed;
+            Console.WriteLine(analysis.ToString());
+        }
+        catch (Exception e)
+        {
+            Analyzer.HandleErrors(e, solution);
+        }
+
+        try
+        {
+            var analysis = Analyzer.Analyze(solution.PartTwo, input);
+            two = analysis.Elapsed;
+            Console.WriteLine(analysis.ToString());
+        }
+        catch (Exception e)
+        {
+            Analyzer.HandleErrors(e, solution);
+        }
         
-        return (analysis.Elapsed + analysis2.Elapsed).Ticks;
+        return (one + two).Ticks;
     }
 
     public static int Year(this ISolution solution)

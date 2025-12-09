@@ -17,7 +17,7 @@ public abstract class AdventOfCode
             return response;
         }
         
-        var cookie = await File.ReadAllTextAsync(filename);
+        string cookie = await File.ReadAllTextAsync(filename);
         return cookie;
     }
     

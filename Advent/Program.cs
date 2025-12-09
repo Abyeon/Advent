@@ -1,5 +1,4 @@
 ﻿using System.CommandLine;
-using System.Diagnostics;
 using System.Drawing;
 using System.Reflection;
 using System.Text;
@@ -54,21 +53,23 @@ root.SetAction(async (result) =>
     int day = result.GetValue(dayOpt);
     bool runAll = result.GetValue(allOpt);
     bool test = result.GetValue(testOpt);
-    int repeat = result.GetValue(repeatOpt) + 1;
+    int repeat = result.GetValue(repeatOpt);
     
     Analyzer.TestMode = test;
+    Analyzer.Repeat = repeat;
     
     List<ISolution> toRun = [];
     foreach (var type in solutions)
     {
         var solution = (ISolution)Activator.CreateInstance(type)!;
+        if (solution.Year() != year) continue;
+        
         if (runAll)
         {
             toRun.Add(solution);
             continue;
         }
-
-        if (solution.Year() != year) continue;
+        
         if (solution.Day() == -1)
         {
             toRun.Add(solution);
@@ -84,7 +85,9 @@ root.SetAction(async (result) =>
     string currentDir = Directory.GetCurrentDirectory();
     string cookie = await AdventOfCode.GetCookie(Path.Combine(currentDir, "cookie.txt"));
 
-    Console.WriteLine($"\nRunning {toRun.Count} {(toRun.Count == 1 ? "puzzle" : "puzzles")} for year: {year}, day: {(runAll ? "ALL" : day)}\n");
+    Console.WriteLine($"\nRunning {toRun.Count} {(toRun.Count == 1 ? "puzzle" : "puzzles")} for year: {year}, day: {(runAll ? "ALL" : day)}");
+    if (repeat > 0) Console.WriteLine($"Repeating {repeat} time(s).");
+    Console.WriteLine();
 
     long time = 0;
     foreach (var solution in toRun)
@@ -108,49 +111,14 @@ root.SetAction(async (result) =>
             path = Path.Combine(path, $"{solution.Day()}.txt");
             input = await AdventOfCode.GetInput(solution.Year(), solution.Day(), cookie, path);
         }
-
-        var originalOut = Console.Out;
-        if (repeat > 1) Console.SetOut(TextWriter.Null);
-
+        
         long start = time;
-        for (var i = 0; i < repeat; i++)
-        {
-            string[] lines = input.Split(['\r', '\n'], StringSplitOptions.RemoveEmptyEntries);
-            try
-            {
-                time += solution.Solve(lines);
-            }
-            catch (NotImplementedException)
-            {
-                Console.Error.WriteLine($"Solution not yet implemented.".FgColor(Color.PaleVioletRed));
-            }
-            catch (Exception e)
-            {
-                var trace = new StackTrace(e, true);
-                var frame = trace.GetFrame(0);
-                
-                int line = -1;
-                if (frame != null)
-                {
-                    line = frame.GetFileLineNumber();
-                }
-
-                Console.Error.WriteLine($"\nError while processing Day {solution.Day()} {(line != -1 ? $"at line {line}" : "")}:"
-                    .BgColor(Color.PaleVioletRed)
-                    .FgColor(Color.Black) + "\n");
-                
-                Console.Error.WriteLine(e.ToString().FgColor(Color.PaleVioletRed));
-                Console.WriteLine();
-            }
-        }
+        string[] lines = input.Split(['\r', '\n'], StringSplitOptions.RemoveEmptyEntries);
+        time += solution.Solve(lines);
 
         var elapsed = TimeSpan.FromTicks(time - start);
-        var average = elapsed / repeat;
-        
-        if (repeat > 1) Console.SetOut(originalOut);
         
         Console.WriteLine("Total".PadRight(32) + $" → {Utils.GetColoredTimeSpan(elapsed)}");
-        if (repeat > 1) Console.WriteLine("Average".PadRight(30) + $" → {Utils.GetColoredTimeSpan(average)}");
         Console.WriteLine();
     }
     
