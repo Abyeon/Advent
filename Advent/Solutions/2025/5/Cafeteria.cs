@@ -73,7 +73,7 @@ public class Cafeteria : ISolution
         return unique.ToString();
     }
 
-    public string TestInput() => """
+    public string TestInputA() => """
                                  3-5
                                  10-14
                                  16-20
@@ -86,4 +86,6 @@ public class Cafeteria : ISolution
                                  17
                                  32
                                  """;
+    
+    public string TestInputB() => TestInputA();
 }

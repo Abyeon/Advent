@@ -53,10 +53,12 @@ public class Lobby : ISolution
         return total.ToString();
     }
 
-    public string TestInput() => """
+    public string TestInputA() => """
                                  987654321111111
                                  811111111111119
                                  234234234234278
                                  818181911112111
                                  """;
+    
+    public string TestInputB() => TestInputA();
 }

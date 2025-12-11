@@ -85,7 +85,7 @@ public class PrintingDepartment : ISolution
         return total.ToString();
     }
 
-    public string TestInput() => """
+    public string TestInputA() => """
                                  ..@@.@@@@.
                                  @@@.@.@.@@
                                  @@@@@.@.@@
@@ -97,4 +97,6 @@ public class PrintingDepartment : ISolution
                                  .@@@@@@@@.
                                  @.@.@@@.@.
                                  """;
+    
+    public string TestInputB() => TestInputA();
 }

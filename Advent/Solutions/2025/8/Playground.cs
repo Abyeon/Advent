@@ -174,7 +174,7 @@ public class Playground : ISolution
         return "Something went wrong.";
     }
 
-    public string TestInput() => """
+    public string TestInputA() => """
                                  162,817,812
                                  57,618,57
                                  906,360,560
@@ -196,4 +196,6 @@ public class Playground : ISolution
                                  984,92,344
                                  425,690,689
                                  """;
+    
+    public string TestInputB() => TestInputA();
 }

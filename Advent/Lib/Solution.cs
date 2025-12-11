@@ -9,19 +9,25 @@ public interface ISolution
 {
     string PartOne(string[] input);
     string PartTwo(string[] input);
-    string TestInput();
+    string TestInputA();
+    string TestInputB();
 }
 
 public static class SolutionExtensions
 {
     public static long Solve(this ISolution solution, string[] input)
     {
-        TimeSpan one = TimeSpan.Zero;
-        TimeSpan two = TimeSpan.Zero;
+        var one = TimeSpan.Zero;
+        var two = TimeSpan.Zero;
+        
+        string[] testA = solution.TestInputA().Split(['\n', '\r'], StringSplitOptions.RemoveEmptyEntries);
+        string[] testB = solution.TestInputB().Split(['\n', '\r'], StringSplitOptions.RemoveEmptyEntries);
+        
+        if (Analyzer.TestMode) input = testA;
         
         try
         {
-            var analysis = Analyzer.Analyze(solution.PartOne, input);
+            var analysis = Analyzer.Analyze(solution.PartOne, input.ToArray());
             one = analysis.Elapsed;
             Console.WriteLine(analysis.ToString());
         }
@@ -29,10 +35,12 @@ public static class SolutionExtensions
         {
             Analyzer.HandleErrors(e, solution);
         }
+        
+        if (Analyzer.TestMode) input = testB;
 
         try
         {
-            var analysis = Analyzer.Analyze(solution.PartTwo, input);
+            var analysis = Analyzer.Analyze(solution.PartTwo, input.ToArray());
             two = analysis.Elapsed;
             Console.WriteLine(analysis.ToString());
         }

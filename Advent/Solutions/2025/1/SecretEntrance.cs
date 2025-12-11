@@ -46,7 +46,7 @@ public class SecretEntrance : ISolution
         return totalZero.ToString();
     }
     
-    public string TestInput() => """
+    public string TestInputA() => """
                                  L68
                                  L30
                                  R48
@@ -58,4 +58,6 @@ public class SecretEntrance : ISolution
                                  R14
                                  L82
                                  """;
+    
+    public string TestInputB() => TestInputA();
 }

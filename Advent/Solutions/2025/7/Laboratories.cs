@@ -69,7 +69,7 @@ public class Laboratories : ISolution
         }
     }
 
-    public string TestInput() => """
+    public string TestInputA() => """
                                  .......S.......
                                  ...............
                                  .......^.......
@@ -87,4 +87,6 @@ public class Laboratories : ISolution
                                  .^.^.^.^.^...^.
                                  ...............
                                  """;
+    
+    public string TestInputB() => TestInputA();
 }

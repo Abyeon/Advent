@@ -191,7 +191,7 @@ public class MovieTheater : ISolution
         return largestArea.ToString();
     }
 
-    public string TestInput() => """
+    public string TestInputA() => """
                                  7,1
                                  11,1
                                  11,7
@@ -201,4 +201,6 @@ public class MovieTheater : ISolution
                                  2,3
                                  7,3
                                  """;
+    
+    public string TestInputB() => TestInputA();
 }

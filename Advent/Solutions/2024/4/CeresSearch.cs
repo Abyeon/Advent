@@ -100,7 +100,7 @@ public class CeresSearch : ISolution
         }
     }
 
-    public string TestInput() => """
+    public string TestInputA() => """
                                  MMMSXXMASM
                                  MSAMXMSMSA
                                  AMXSXMAAMM
@@ -112,4 +112,6 @@ public class CeresSearch : ISolution
                                  MAMMMXMMMM
                                  MXMXAXMASX
                                  """;
+    
+    public string TestInputB() => TestInputA();
 }

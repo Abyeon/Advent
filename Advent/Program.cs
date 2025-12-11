@@ -58,6 +58,7 @@ root.SetAction(async (result) =>
     Analyzer.TestMode = test;
     Analyzer.Repeat = repeat;
     
+    // Get solutions that match conditions
     List<ISolution> toRun = [];
     foreach (var type in solutions)
     {
@@ -70,17 +71,14 @@ root.SetAction(async (result) =>
             continue;
         }
         
-        if (solution.Day() == -1)
-        {
-            toRun.Add(solution);
-            continue;
-        }
-
         if (solution.Day() == day)
         {
             toRun.Add(solution);
         }
     }
+    
+    // Sort by day
+    toRun.Sort((a, b) => a.Day().CompareTo(b.Day()));
     
     string currentDir = Directory.GetCurrentDirectory();
     string cookie = await AdventOfCode.GetCookie(Path.Combine(currentDir, "cookie.txt"));
@@ -89,31 +87,26 @@ root.SetAction(async (result) =>
     if (repeat > 0) Console.WriteLine($"Repeating {repeat} time(s).");
     Console.WriteLine();
 
+    // Run selected solutions
     long time = 0;
     foreach (var solution in toRun)
     {
         Console.WriteLine($"Day {solution.Day()}: {solution.Name().FgColor(Color.CornflowerBlue)}");
         
-        string input;
-        if (test)
+        string path = Path.Combine(currentDir, $@"inputs\{solution.Year()}\");
+        if (!Directory.Exists(path))
         {
-            input = solution.TestInput();
+            Directory.CreateDirectory(path);
+            Console.WriteLine($"Created: {path}");
         }
-        else
-        {
-            string path = Path.Combine(currentDir, $@"inputs\{solution.Year()}\");
-            if (!Directory.Exists(path))
-            {
-                Directory.CreateDirectory(path);
-                Console.WriteLine($"Created: {path}");
-            }
     
-            path = Path.Combine(path, $"{solution.Day()}.txt");
-            input = await AdventOfCode.GetInput(solution.Year(), solution.Day(), cookie, path);
-        }
+        path = Path.Combine(path, $"{solution.Day()}.txt");
+        
+        string input = await AdventOfCode.GetInput(solution.Year(), solution.Day(), cookie, path);
+        string[] lines = input.Split(['\n', '\r'], StringSplitOptions.RemoveEmptyEntries);
         
         long start = time;
-        string[] lines = input.Split(['\r', '\n'], StringSplitOptions.RemoveEmptyEntries);
+        
         time += solution.Solve(lines);
 
         var elapsed = TimeSpan.FromTicks(time - start);
