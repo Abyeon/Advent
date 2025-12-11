@@ -70,9 +70,7 @@ public static class Day10Solver
     {
         if (rowA == rowB) return matrix;
 
-        var tmp = matrix[rowA];
-        matrix[rowA] = matrix[rowB];
-        matrix[rowB] = tmp;
+        (matrix[rowA], matrix[rowB]) = (matrix[rowB], matrix[rowA]);
 
         return matrix;
     }
@@ -82,28 +80,27 @@ public static class Day10Solver
     // -----------------------------
     private static (int[][] matrix, List<int> pivots, int nextRow) GaussGF2(int rowCount, int colCount, int[][] matrix)
     {
-        int pivotRow = 0;
+        var pivotRow = 0;
         var pivots = new List<int>();
 
-        for (int colIndex = 0; colIndex < colCount; colIndex++)
+        for (var colIndex = 0; colIndex < colCount; colIndex++)
         {
             int? pivotCandidate = Enumerable.Range(pivotRow, rowCount - pivotRow)
                 .FirstOrDefault(r => matrix[r][colIndex] == 1);
 
-            if (pivotCandidate == null || pivotCandidate == default) continue;
+            if (pivotCandidate == null) continue;
 
             int pivot = pivotCandidate.Value;
             SwapRows(pivotRow, pivot, matrix);
 
             // Eliminate
-            for (int rowIndex = 0; rowIndex < rowCount; rowIndex++)
+            for (var rowIndex = 0; rowIndex < rowCount; rowIndex++)
             {
-                if (rowIndex != pivotRow && matrix[rowIndex][colIndex] == 1)
+                if (rowIndex == pivotRow || matrix[rowIndex][colIndex] != 1) continue;
+                
+                for (var k = 0; k <= colCount; k++)
                 {
-                    for (int k = 0; k <= colCount; k++)
-                    {
-                        matrix[rowIndex][k] ^= matrix[pivotRow][k];
-                    }
+                    matrix[rowIndex][k] ^= matrix[pivotRow][k];
                 }
             }
 
@@ -130,8 +127,8 @@ public static class Day10Solver
         int rowCount = target.Length;
         int colCount = buttons.Length;
 
-        var matrix = BuildMatrix(rowCount, colCount, buttons, 0, 1, r => target[r]);
-        var (reduced, pivots, nextRow) = GaussGF2(rowCount, colCount, matrix);
+        int[][] matrix = BuildMatrix(rowCount, colCount, buttons, 0, 1, r => target[r]);
+        (int[][] reduced, var pivots, int nextRow) = GaussGF2(rowCount, colCount, matrix);
 
         // Check inconsistency
         for (int r = nextRow; r < rowCount; r++)
@@ -145,7 +142,7 @@ public static class Day10Solver
             .Select((col, index) => (col, index))
             .ToDictionary(x => x.col, x => x.index);
 
-        int MinSolutionSum = int.MaxValue;
+        var minSolutionSum = int.MaxValue;
 
         int freeCount = freeVars.Length;
         int maskLimit = 1 << freeCount;
@@ -182,13 +179,13 @@ public static class Day10Solver
             }
 
             int sum = solution.Sum();
-            MinSolutionSum = Math.Min(MinSolutionSum, sum);
+            minSolutionSum = Math.Min(minSolutionSum, sum);
         }
 
-        return MinSolutionSum;
+        return minSolutionSum;
     }
 
-    public static int Part1((int[], int[][], int[])[] input)
+    private static int Part1((int[], int[][], int[])[] input)
     {
         return input.Sum(block =>
             SolvePattern(block.Item1, block.Item2) ?? 0
@@ -265,21 +262,6 @@ public static class Day10Solver
 
         int Total(double[] solution) => solution.Sum(x => (int)Math.Round(x));
 
-        double BackSubstituteValue(int col, Dictionary<int, double> partial)
-        {
-            if (partial.ContainsKey(col)) return partial[col];
-
-            int pr = pivotMap[col];
-            double value = reduced[pr][colCount];
-
-            foreach (var fv in freeVars)
-            {
-                value -= reduced[pr][fv] * partial[fv];
-            }
-
-            return value;
-        }
-
         double[] Back(Dictionary<int, double> fm)
         {
             double[] result = new double[colCount];
@@ -334,6 +316,9 @@ public static class Day10Solver
 
         int bestSolution = int.MaxValue;
 
+        Search(0, new int[freeCount], 0);
+        return bestSolution;
+
         void Search(int depth, int[] values, int runningSum)
         {
             if (runningSum >= bestSolution || runningSum > sumJ || !Feasible(depth, values))
@@ -359,11 +344,23 @@ public static class Day10Solver
             }
         }
 
-        Search(0, new int[freeCount], 0);
-        return bestSolution;
+        double BackSubstituteValue(int col, Dictionary<int, double> partial)
+        {
+            if (partial.TryGetValue(col, out double substituteValue)) return substituteValue;
+
+            int pr = pivotMap[col];
+            double value = reduced[pr][colCount];
+
+            foreach (int fv in freeVars)
+            {
+                value -= reduced[pr][fv] * partial[fv];
+            }
+
+            return value;
+        }
     }
 
-    public static int Part2((int[], int[][], int[])[] input)
+    private static int Part2((int[], int[][], int[])[] input)
     {
         return input.Sum(block =>
             SolveJoltage(block.Item3, block.Item2)

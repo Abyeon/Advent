@@ -116,7 +116,7 @@ public class Factory : ISolution
     [Test("33", "20617")]
     public string PartTwo(string[] input)
     {
-        // I cheated :(
+        // I cheated for part two (seriously it was this or Z3... I'll come back after learning some Z3) :(
         var total = Day10Solver.Solve(input.AsEnumerable());
         return total.Part2.ToString();
     }
