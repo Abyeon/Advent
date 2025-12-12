@@ -141,10 +141,10 @@ public class ChristmasTreeFarm : ISolution
         return total.ToString(); // Apparently just culling works. Lol
     }
 
-    [Test("Advent of Code complete! :)", "Advent of Code complete! :)")]
+    [Test("Merry Christmas!", "Merry Christmas!")]
     public string PartTwo(string[] input)
     {
-        return "Advent of Code complete! :)";
+        return "Merry Christmas!";
     }
 
     public string TestInputA() => """
