@@ -1,6 +1,6 @@
 ﻿namespace Advent.Lib;
 
-public class InterlockedExtensions
+public static class InterlockedExtensions
 {
     public static void Max(ref long target, long value)
     {
