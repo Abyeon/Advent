@@ -83,6 +83,13 @@ root.SetAction(async (result) =>
     string currentDir = Directory.GetCurrentDirectory();
     string cookie = await AdventOfCode.GetCookie(Path.Combine(currentDir, "cookie.txt"));
 
+    // Return if we didn't find any puzzles
+    if (toRun.Count == 0)
+    {
+        Console.WriteLine("No puzzles found.");
+        return;
+    }
+    
     Console.WriteLine($"\nRunning {toRun.Count} {(toRun.Count == 1 ? "puzzle" : "puzzles")} for year: {year}, day: {(runAll ? "ALL" : day)}");
     if (repeat > 0) Console.WriteLine($"Repeating {repeat} time(s).");
     Console.WriteLine();
@@ -104,14 +111,14 @@ root.SetAction(async (result) =>
         
         string input = await AdventOfCode.GetInput(solution.Year(), solution.Day(), cookie, path);
         string[] lines = input.Split(['\n', '\r'], StringSplitOptions.RemoveEmptyEntries);
-        
-        long start = time;
-        
-        time += solution.Solve(lines);
 
-        var elapsed = TimeSpan.FromTicks(time - start);
+        // Run the puzzle and get the elapsed time
+        long elapsed = solution.Solve(lines);
+        time += elapsed;
+
+        var ts = TimeSpan.FromTicks(elapsed);
         
-        Console.WriteLine("Total".PadRight(32) + $" → {Utils.GetColoredTimeSpan(elapsed)}");
+        Console.WriteLine("Total".PadRight(32) + $" → {Utils.GetColoredTimeSpan(ts)}");
         Console.WriteLine();
     }
     
